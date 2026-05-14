@@ -1,12 +1,11 @@
-import Anthropic from '@anthropic-ai/sdk'
+import { GoogleGenerativeAI, type GenerativeModel } from '@google/generative-ai'
 
-let client: Anthropic | null = null
+let model: GenerativeModel | null = null
 
-export function getAnthropicClient(): Anthropic {
-  if (!client) {
-    client = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY!,
-    })
+export function getAIClient(): GenerativeModel {
+  if (!model) {
+    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!)
+    model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
   }
-  return client
+  return model
 }

@@ -4,7 +4,7 @@ import { db } from '@/lib/db'
 import { prompts, promptRuns, mentions, citations, brands, competitors, visibilityScores } from '@/lib/db/schema'
 import { eq, desc, gte, and, inArray } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
-import { getAnthropicClient } from '@/lib/anthropic/client'
+import { getAIClient } from '@/lib/anthropic/client'
 import { buildSimulationPrompt } from '@/lib/anthropic/simulate'
 import { parseSimulationResponse } from '@/lib/anthropic/parse'
 import { calculateScoreBreakdown } from '@/lib/scoring/calculate'
@@ -30,7 +30,7 @@ export async function runPrompt(promptId: string, engine: AIEngine) {
     .returning()
 
   try {
-    const anthropic = getAnthropicClient()
+    const aiModel = getAIClient()
     const simPrompt = buildSimulationPrompt({
       brand: {
         name: brand.name,
@@ -45,13 +45,8 @@ export async function runPrompt(promptId: string, engine: AIEngine) {
       locale: prompt.locale,
     })
 
-    const message = await anthropic.messages.create({
-      model: 'claude-opus-4-5',
-      max_tokens: 2000,
-      messages: [{ role: 'user', content: simPrompt }],
-    })
-
-    const fullText = message.content[0].type === 'text' ? message.content[0].text : ''
+    const result = await aiModel.generateContent(simPrompt)
+    const fullText = result.response.text()
 
     const brandForParse = {
       id: brand.id, workspaceId: brand.workspaceId, name: brand.name,
