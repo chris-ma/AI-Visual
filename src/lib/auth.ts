@@ -1,6 +1,5 @@
 import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
-import { DrizzleAdapter } from '@auth/drizzle-adapter'
 import { db } from '@/lib/db'
 import { users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
@@ -13,7 +12,6 @@ const credentialsSchema = z.object({
 })
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: DrizzleAdapter(db),
   session: { strategy: 'jwt' },
   pages: {
     signIn: '/auth/login',
