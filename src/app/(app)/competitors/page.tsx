@@ -7,7 +7,7 @@ import { CompetitorsClient } from './CompetitorsClient'
 
 export default async function CompetitorsPage() {
   const session = await auth()
-  if (!session?.user?.id) redirect('/auth/login')
+  if (!session?.user?.id) redirect('/login')
 
   const workspaces = await getUserWorkspaces()
   if (workspaces.length === 0) redirect('/onboarding/workspace')

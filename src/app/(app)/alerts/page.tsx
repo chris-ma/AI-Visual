@@ -6,7 +6,7 @@ import { AlertsClient } from './AlertsClient'
 
 export default async function AlertsPage() {
   const session = await auth()
-  if (!session?.user?.id) redirect('/auth/login')
+  if (!session?.user?.id) redirect('/login')
 
   const workspaces = await getUserWorkspaces()
   if (workspaces.length === 0) redirect('/onboarding/workspace')

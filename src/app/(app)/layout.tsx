@@ -6,7 +6,7 @@ import { getUserWorkspaces } from '@/actions/workspace'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
-  if (!session?.user) redirect('/auth/login')
+  if (!session?.user) redirect('/login')
 
   const workspaces = await getUserWorkspaces()
   if (workspaces.length === 0) redirect('/onboarding/workspace')

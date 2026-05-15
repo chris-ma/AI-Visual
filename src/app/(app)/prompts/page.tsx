@@ -6,7 +6,7 @@ import { PromptsClient } from './PromptsClient'
 
 export default async function PromptsPage() {
   const session = await auth()
-  if (!session?.user?.id) redirect('/auth/login')
+  if (!session?.user?.id) redirect('/login')
 
   const workspaces = await getUserWorkspaces()
   if (workspaces.length === 0) redirect('/onboarding/workspace')
