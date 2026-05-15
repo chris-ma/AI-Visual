@@ -70,7 +70,7 @@ export default function LoginPage() {
       <CardFooter className="justify-center">
         <p className="text-sm text-muted-foreground">
           Don&apos;t have an account?{' '}
-          <Link href="/auth/signup" className="text-primary hover:underline font-medium">Sign up</Link>
+          <Link href="/signup" className="text-primary hover:underline font-medium">Sign up</Link>
         </p>
       </CardFooter>
     </Card>

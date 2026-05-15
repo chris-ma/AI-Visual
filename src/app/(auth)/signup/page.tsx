@@ -32,7 +32,7 @@ export default function SignupPage() {
       const result = await signIn('credentials', { email: data.email, password: data.password, redirect: false })
       if (result?.error) {
         toast.error('Account created but sign-in failed. Try logging in.')
-        router.push('/auth/login')
+        router.push('/login')
       } else {
         router.push('/onboarding/workspace')
         router.refresh()
@@ -79,7 +79,7 @@ export default function SignupPage() {
       <CardFooter className="justify-center">
         <p className="text-sm text-muted-foreground">
           Already have an account?{' '}
-          <Link href="/auth/login" className="text-primary hover:underline font-medium">Sign in</Link>
+          <Link href="/login" className="text-primary hover:underline font-medium">Sign in</Link>
         </p>
       </CardFooter>
     </Card>
