@@ -7,16 +7,42 @@ import { DashboardClient } from './DashboardClient'
 
 export default async function DashboardPage() {
   const session = await auth()
-  if (!session?.user?.id) redirect('/login')
+  if (!session?.user?.id) {
+    console.log('[dashboard] no session → /login')
+    redirect('/login')
+  }
 
-  const workspaces = await getUserWorkspaces()
-  if (workspaces.length === 0) redirect('/onboarding/workspace')
+  let workspaces
+  try {
+    workspaces = await getUserWorkspaces()
+  } catch (err) {
+    console.error('[dashboard] getUserWorkspaces threw:', err instanceof Error ? err.message : String(err))
+    redirect('/login')
+  }
+
+  if (workspaces.length === 0) {
+    console.log('[dashboard] no workspaces → /onboarding/workspace')
+    redirect('/onboarding/workspace')
+  }
 
   const workspace = workspaces[0]
-  const brand = await getBrandForWorkspace(workspace.id)
+  console.log('[dashboard] rendering for workspace', workspace.id)
 
-  const scores = brand ? await getVisibilityScores(workspace.id, brand.id) : []
-  const recentRuns = await getRecentRunsForWorkspace(workspace.id)
+  let brand = null
+  try {
+    brand = await getBrandForWorkspace(workspace.id)
+  } catch (err) {
+    console.error('[dashboard] getBrandForWorkspace threw:', err instanceof Error ? err.message : String(err))
+  }
+
+  let scores: Awaited<ReturnType<typeof getVisibilityScores>> = []
+  let recentRuns: Awaited<ReturnType<typeof getRecentRunsForWorkspace>> = []
+  try {
+    scores = brand ? await getVisibilityScores(workspace.id, brand.id) : []
+    recentRuns = await getRecentRunsForWorkspace(workspace.id)
+  } catch (err) {
+    console.error('[dashboard] data fetch threw:', err instanceof Error ? err.message : String(err))
+  }
 
   return (
     <DashboardClient

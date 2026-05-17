@@ -20,21 +20,38 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Credentials({
       async authorize(credentials) {
         const parsed = credentialsSchema.safeParse(credentials)
-        if (!parsed.success) return null
+        if (!parsed.success) {
+          console.error('[auth] authorize: invalid credentials shape', parsed.error.flatten().fieldErrors)
+          return null
+        }
 
         const { email, password } = parsed.data
 
-        const [user] = await db
-          .select()
-          .from(users)
-          .where(eq(users.email, email))
-          .limit(1)
+        let user
+        try {
+          const [found] = await db
+            .select()
+            .from(users)
+            .where(eq(users.email, email))
+            .limit(1)
+          user = found
+        } catch (err) {
+          console.error('[auth] authorize: DB query failed:', err instanceof Error ? err.message : String(err))
+          return null
+        }
 
-        if (!user || !user.passwordHash) return null
+        if (!user || !user.passwordHash) {
+          console.log('[auth] authorize: user not found or no password hash for', email)
+          return null
+        }
 
         const valid = await bcrypt.compare(password, user.passwordHash)
-        if (!valid) return null
+        if (!valid) {
+          console.log('[auth] authorize: password mismatch for', email)
+          return null
+        }
 
+        console.log('[auth] authorize: success for', email)
         return {
           id: user.id,
           email: user.email,

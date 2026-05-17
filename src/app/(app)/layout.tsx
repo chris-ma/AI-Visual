@@ -6,10 +6,23 @@ import { getUserWorkspaces } from '@/actions/workspace'
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const session = await auth()
-  if (!session?.user) redirect('/login')
+  if (!session?.user) {
+    console.log('[app-layout] no session → /login')
+    redirect('/login')
+  }
 
-  const workspaces = await getUserWorkspaces()
-  if (workspaces.length === 0) redirect('/onboarding/workspace')
+  let workspaces
+  try {
+    workspaces = await getUserWorkspaces()
+  } catch (err) {
+    console.error('[app-layout] getUserWorkspaces threw:', err instanceof Error ? err.message : String(err))
+    redirect('/login')
+  }
+
+  if (workspaces.length === 0) {
+    console.log('[app-layout] no workspaces for user', session.user.id, '→ /onboarding/workspace')
+    redirect('/onboarding/workspace')
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
