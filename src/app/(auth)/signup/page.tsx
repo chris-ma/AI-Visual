@@ -45,16 +45,16 @@ export default function SignupPage() {
   }
 
   return (
-    <Card>
+    <Card className="shadow-lg" style={{ borderColor: '#c5d8ee', background: '#ffffff' }}>
       <CardHeader>
-        <div className="flex items-center gap-2 mb-2">
-          <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-primary-foreground text-xs font-bold">AI</span>
+        <div className="flex items-center gap-2.5 mb-3">
+          <div className="h-9 w-9 rounded-xl flex items-center justify-center" style={{ background: '#4a6fa5' }}>
+            <span className="text-white text-xs font-bold">AI</span>
           </div>
-          <span className="font-semibold text-sm text-muted-foreground">AI Visibility</span>
+          <span className="font-semibold text-sm" style={{ color: '#6b8ab8' }}>AI Visibility</span>
         </div>
-        <CardTitle className="text-2xl">Create an account</CardTitle>
-        <CardDescription>Start tracking your AI visibility in minutes</CardDescription>
+        <CardTitle className="text-2xl" style={{ color: '#1a2b4a' }}>Create an account</CardTitle>
+        <CardDescription style={{ color: '#6b8ab8' }}>Start tracking your AI visibility in minutes</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

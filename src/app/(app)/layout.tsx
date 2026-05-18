@@ -25,10 +25,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen" style={{ background: '#eef3ff' }}>
       <AppSidebar />
       <div className="pl-60">
-        <header className="h-14 border-b bg-white flex items-center justify-between px-6">
+        <header className="h-14 flex items-center justify-between px-6" style={{ background: '#f5f8ff', borderBottom: '1px solid #c5d8ee' }}>
           <div />
           <div className="w-48">
             <UserMenu />
